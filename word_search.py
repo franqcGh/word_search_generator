@@ -14,7 +14,6 @@ def insert_word( word: str , i:int , j:int , direction:int , row:int , column:in
             matrix[i][j] = letter
         else:
             raise(RuntimeError)
-        matrix[i][j] = letter
 
         if direction in (3,4,5):
             i += 1
