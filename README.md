@@ -9,3 +9,8 @@ This little program is developed for **educational purposes**, as a tool for my 
 * Everything is executed by console only
 * Entered words by using the word_list.txt
 * Write one word per line
+
+## v2.0 - Second working version
+
+* A loop due to writing the same word in different directions was errased
+* This version is way faster than the first one

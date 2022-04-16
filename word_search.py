@@ -5,13 +5,16 @@
 # direction : towards the word is aimed { 1: NE ; 2: E ; 3: SE ; 4: S ; 5: SW ; 6: W ; 7: NW ; 8: N }
 
 def insert_word( word: str , i:int , j:int , direction:int , row:int , column:int , matrix:list ):
+    # to avoid writing the same word in different directions, create a copy of the original matrix
+    matrix_temp = [row_temp.copy() for row_temp in matrix.copy()]
+
     # loop for every letter of the word
     for letter in word.upper():
         
         # condition to avoid writing a word over another or to crossing boundaries of the matrix
         # raise an error to recall insert_word function and try another direction
-        if ( (row > i and i >= 0) and (column > j and j >= 0) ) and (matrix [i][j] == '-' or matrix[i][j] == letter):
-            matrix[i][j] = letter
+        if ( (row > i and i >= 0) and (column > j and j >= 0) ) and (matrix_temp[i][j] == '-' or matrix_temp[i][j] == letter):
+            matrix_temp[i][j] = letter
         else:
             raise(RuntimeError)
 
@@ -24,7 +27,7 @@ def insert_word( word: str , i:int , j:int , direction:int , row:int , column:in
             j += 1
         elif direction in (5,6,7):
             j -= 1
-
+    return matrix_temp
 
 # core of the program
 def run():
@@ -46,10 +49,6 @@ def run():
     word_list = [word.replace('\n','') for word in f.readlines()]
     f.close()
 
-    # this first working version sometimes enters in an infinite loop due to writing a word in the matrix
-    # to avoid this: create a counter called time that after 300 loops, raise a ValueError
-    time = 1
-
     # loop for writing every word in the matrix
     for word in word_list:
         # Deciding initial position
@@ -57,17 +56,13 @@ def run():
         j = randint(0,column - 1)
 
         # setting direction as NE by default
-        direction = 1
+        direction = randint(1,8)
 
         # loop for trying different directions
         while direction < 9:
-            if time > 300:
-                raise ValueError
-            time +=1
-
             # calling inser_word function
             try:
-                insert_word( word, i , j , direction , row , column , matrix)
+                matrix = insert_word( word, i , j , direction , row , column , matrix)
                 break
             except RuntimeError:
                 direction += 1
@@ -90,11 +85,4 @@ def run():
 
 
 if __name__ == '__main__':
-    
-    # loop for avoiding an infinite loop, while writing words in 'matrix'
-    while True:
-        try:
-            run()
-            break
-        except ValueError:
-            pass
+    run()
